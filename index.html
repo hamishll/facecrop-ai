@@ -1,0 +1,31 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Face Crop</title>
+  <meta name="description" content="Description">
+  <meta name="author" content="HL">
+  <link rel="stylesheet" href="css/styles.css">
+  <!--<link rel="stylesheet" href="css/responsive.css"> -->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="js/jszip.min.js"></script>
+<meta name="viewport" content="width=device-width">
+
+
+</head>
+
+<body>
+
+
+    <h1>Face Crop</h1>
+      <textarea id="dimensions">500x300,200x300,1000x200</textarea>
+      <label for="input" class="custom-file-upload">Select</label>
+      <input id="input" type="file"/>
+  </div>
+  <canvas id="viewport"></canvas>
+  <button onclick="exportAll()">Crop</button>
+  <script src="js/face-crop.js"></script>
+</body>
+</html>
