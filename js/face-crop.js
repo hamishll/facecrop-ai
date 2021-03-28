@@ -96,26 +96,21 @@ function exportImage(dim) {
     canvas.height = dim_y;
     ctx.drawImage(img, 0-0.5, 0-0.5, dim_x, dim_y);
     var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");  // here is the most important part because if you dont replace you will get a DOM 18 exception.
-    window.location.href=image; // it will save locally
+    //window.location.href=image; // it will save locally
+    zip.file("crop_"&dim&".png", image, {base64: true});
 }
 
 function exportAll() {
+    
     dimensions.forEach(dim => exportImage(dim));
-    var zip = new JSZip();
+    zip.generateAsync({type:"blob"})
+    .then(function(content) {
+        // see FileSaver.js
+        saveAs(content, "Crops.zip");
+    });
 }
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-
-// JSZip
-
 var zip = new JSZip();
 zip.file("Hello.txt", "Hello World\n");
-
-var img = zip.folder("images");
-img.file("smile.gif", imgData, {base64: true});
-zip.generateAsync({type:"blob"})
-.then(function(content) {
-    // see FileSaver.js
-    saveAs(content, "example.zip");
-});
