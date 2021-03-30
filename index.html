@@ -12,21 +12,36 @@
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="js/jszip.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
+  <link  href="css/cropper.css" rel="stylesheet">
+  <script src="js/cropper.js"></script>
 <meta name="viewport" content="width=device-width">
 
 
 </head>
 
 <body>
-
-
-    <h1>Face Crop</h1>
-      <textarea id="dimensions">500x300,200x300,1000x200</textarea>
-      <label for="input" class="custom-file-upload">Select</label>
-      <input id="input" type="file"/>
+  <div id="header">
+    <h2>Face Crop</h2>
   </div>
-  <canvas id="viewport"></canvas>
-  <button onclick="exportAll()">Crop</button>
+  <div id="container">
+    
+    <div>
+      <h3>Enter your crop dimensions</h3>
+      <textarea id="dimensions">300x600,600x300,300x250,400x400</textarea>
+    </div>
+    <div>
+      <label for="input" class="custom-file-upload">Select Image</label>
+      <input id="input" type="file"/>
+      <button  class="custom-file-upload" onclick="exportAll()">Generate Crops</button>
+    </div>
+    <div>
+      <canvas id="viewport"></canvas>
+    </div>
+    <!-- <div>
+      <img id="image" src="img/detection1.jpg">
+    </div> -->
+  </div>
+  
   <script src="js/face-crop.js"></script>
 </body>
 </html>
