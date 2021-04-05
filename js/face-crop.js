@@ -79,18 +79,12 @@ function setDimensions() {
 
 
 img.onload = function() {
-    var canvasWidthNew = ((img.width > img.height) ? canvasWidth : canvasWidth * (img.width / img.height));
-    var w = canvasWidthNew, h = canvasWidthNew*(img.height/img.width);
-    /*var w = img.width, h = img.height;*/
-    canvas.height = h;     
-    canvas.width = w;  
-    ctx.imageSmoothingEnabled = true; 
-    ctx.drawImage(img, 0-0.5, 0-0.5, w, h);
     //var dataURL = canvas.toDataURL();
     blob = imgToBlob();
     sourceWidth = img.width;
     sourceHeight = img.height;
     faces = getFaces(blob);
+    loadCropper();
 };
 
 function imgToBlob() {
@@ -111,6 +105,7 @@ function imgToBlob() {
 function handleFiles(e) {
     //console.log(img);
     img.src = URL.createObjectURL(e.target.files[0]);
+    document.getElementById("image").src = img.src;
 };
 
 function exportImage(dim) {
@@ -151,16 +146,18 @@ zip.file("LICENSE.md", "Created by hamishll\n");
 
 
 // CropperJS
-const image = document.getElementById('image');
-const cropper = new Cropper(image, {
-  aspectRatio: 16 / 9,
-  crop(event) {
-    console.log(event.detail.x);
-    console.log(event.detail.y);
-    console.log(event.detail.width);
-    console.log(event.detail.height);
-    console.log(event.detail.rotate);
-    console.log(event.detail.scaleX);
-    console.log(event.detail.scaleY);
-  },
-});
+function loadCropper() {
+    const image = document.getElementById('image');
+    const cropper = new Cropper(image, {
+    aspectRatio: 16 / 9,
+    crop(event) {
+        console.log(event.detail.x);
+        console.log(event.detail.y);
+        console.log(event.detail.width);
+        console.log(event.detail.height);
+        console.log(event.detail.rotate);
+        console.log(event.detail.scaleX);
+        console.log(event.detail.scaleY);
+    },
+    });
+}
