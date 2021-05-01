@@ -26,15 +26,34 @@
     <h2>Face Crop</h2>
   </div>
   <div id="container">
-    
-    <div>
-      <h3>Enter your crop dimensions</h3>
-      <textarea id="dimensions">1920x1080,1080x1080,1080x1920,1080x1350</textarea>
+    <div id="dimensions_container">
+      <!-- <h3>Enter your crop dimensions</h3> -->
+      <div class="card">
+        <h2>Max size <span id="qualityvalue">200</span> kb</h2>
+        <div>
+          <input type="range" min="1" max="1024" value="200" class="slider" id="quality">
+        </div>
+      </div>
+      <div class="card">
+        <h2>Website dimensions</h2>
+        <span>(JPG, lower quality)</span>
+        <textarea class="dimension_box" id="Web">5120x2560,750x828,3840x760,850x630,1804x1354,1080x1080</textarea>
+      </div>
+      <div class="card">
+        <h2>Social dimensions</h2>
+        <span>(PNG, 2x resolution, lower quality)</span>
+        <textarea class="dimension_box" id="Social">820x312,1080x1350,1080x1920,1080x1080</textarea>
+      </div>
+      <div class="card">
+        <h2>CRM dimensions</h2>
+        <span>(JPG, 2x, original quality)</span>
+        <textarea class="dimension_box" id="CRM">1200x950,1200x900,600x600</textarea>
+      </div>
     </div>
     <div>
       <label for="input" class="custom-file-upload">Select Image</label>
       <input id="input" type="file"/>
-      <button  class="custom-file-upload" onclick="exportAll()">Generate Crops</button>
+      <button  class="custom-file-upload" onclick="exportAll()">Export Crops</button>
     </div>
     <div>
       <canvas id="viewport"></canvas>
@@ -44,6 +63,10 @@
     </div>
   </div>
   
+  <div id="loadingbar">Loading...
+    <div id="wheel"></div>
+  </div>
+
   <script src="js/face-crop.js"></script>
 </body>
 </html>
