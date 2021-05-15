@@ -62,9 +62,6 @@ function setDimensions() {
         })
     });
     console.log(dimensions);
-    canvas.height = Math.ceil(dimensions.length/3) * (previewWidth + margin) + margin;
-    ctx.fillStyle = 'rgb(40, 40, 40)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 setDimensions();
 
@@ -178,6 +175,11 @@ function parseFaces(faces) {
 //////////////////////////////////////////////////////////////////
 function pressExport() {loadingbar.style.opacity = 1;};
 function exportAll() {
+
+    canvas.height = Math.ceil(dimensions.length/3) * (previewWidth + margin) + margin;
+    ctx.fillStyle = 'rgb(40, 40, 40)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
     loadingbar.style.opacity = 1;
     //dimensions.forEach(dim => exportImage(dim));
     counter = 0;
@@ -190,6 +192,15 @@ function exportAll() {
     });
     counter = 0;
     wheel.style.animation = "";
+
+    try {document.body.removeChild(document.getElementById('previewImg'));}
+    catch (e) {};
+    var preview = document.createElement('img');
+    preview.src = canvas.toDataURL('image/png', 0.7);
+    preview.id = "previewImg";
+    document.body.appendChild(preview);
+    canvas.height = 0;
+    document.getElementById('previewImg').scrollIntoView({behavior: "smooth"});
 }
 //////////////////////////////////////////////////////////////////
 // 3.1. Export single crop (NEW)
@@ -246,6 +257,9 @@ function exportCrop(cropper) {
     ctx.font = '25px Verdana,sans-serif';
     ctx.fillStyle = '#DDD';
     ctx.fillText(cropper.element.id, margin + (previewWidth + margin)*((counter-1)%3) + x, margin-15 + (previewWidth+margin)*(Math.ceil(counter/3)-1) + y);
+
+    
+
     
 };
 
