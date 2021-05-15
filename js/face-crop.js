@@ -69,7 +69,7 @@ function setDimensions() {
 setDimensions();
 
 var zip = new JSZip();
-zip.file("LICENSE.md", "Created by hamishll\n");
+//zip.file("LICENSE.md", "Created by hamishll\n");
 
 
 
@@ -176,16 +176,17 @@ function parseFaces(faces) {
 //////////////////////////////////////////////////////////////////
 // 3. Export all images
 //////////////////////////////////////////////////////////////////
+function pressExport() {loadingbar.style.opacity = 1;};
 function exportAll() {
     loadingbar.style.opacity = 1;
     //dimensions.forEach(dim => exportImage(dim));
     counter = 0;
     croppers.forEach(item => setTimeout(exportCrop(item),100));
-    zip.file(filename.slice(0,-4)+".jpg", canvas.toDataURL('image/jpg', 0.7).split('base64,')[1],{base64: true});
+    zip.file(filename.slice(0,-4)+"_preview.png", canvas.toDataURL('image/png', 0.7).split('base64,')[1],{base64: true});
     zip.generateAsync({type:"blob"})
     .then(function(content) {
         // see FileSaver.js
-        saveAs(content, "crops_" + filename + ".zip");
+        saveAs(content, "crops_" + filename.slice(0,-4) + ".zip");
     });
     counter = 0;
     wheel.style.animation = "";

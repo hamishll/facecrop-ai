@@ -124,12 +124,15 @@ img {
     opacity: 0;
 }
 #wheel {
-    animation: rotation 1.2s infinite linear;
-    background: black;
+    animation: rotation 1.2s infinite;
+    animation-timing-function: cubic-bezier(0, 1, 1, 0);
+    background: rgb(0,60,0);
     position: relative;
-    left: 130px;
+    top: -20px;
+    left: 125px;
     width: 20px;
     height: 20px;
+    border-radius: 5px;
 }
 @keyframes rotation {
     from {
