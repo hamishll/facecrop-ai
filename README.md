@@ -1,2 +1,2 @@
-# facecrop-ai
+# Smart Crop
  
