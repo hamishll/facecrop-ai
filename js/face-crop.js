@@ -26,6 +26,13 @@ var quality = 0.7;
 var fileSizeLimit = 200000 * 0.90;
 var counter = 0;
 
+// Initialise canvas for summary preview
+var canvas = document.getElementById('preview');  
+var previewWidth = 1000; 
+var margin = 50;  
+canvas.width = 3 * (previewWidth + margin) + margin;  
+var ctx = canvas.getContext('2d');
+
 
 //////////////////////////////////////////////////////////////////
 // 0. Initialise Application
@@ -55,6 +62,9 @@ function setDimensions() {
         })
     });
     console.log(dimensions);
+    canvas.height = Math.ceil(dimensions.length/3) * (previewWidth + margin) + margin;
+    ctx.fillStyle = 'rgb(40, 40, 40)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 setDimensions();
 
@@ -171,6 +181,7 @@ function exportAll() {
     //dimensions.forEach(dim => exportImage(dim));
     counter = 0;
     croppers.forEach(item => setTimeout(exportCrop(item),100));
+    zip.file(filename.slice(0,-4)+".jpg", canvas.toDataURL('image/jpg', 0.7).split('base64,')[1],{base64: true});
     zip.generateAsync({type:"blob"})
     .then(function(content) {
         // see FileSaver.js
@@ -205,9 +216,6 @@ function exportCrop(cropper) {
 
     }
     var crop = cropper.getCroppedCanvas({width: cropper.element.id.split("x")[0] * scalefactor, height: cropper.element.id.split("x")[1] * scalefactor});
-    // var imgUrl = crop.toDataURL('image/'+imageFormat, quality);
-    // var overhead = returnDataURLsize(imgUrl)/fileSizeLimit;
-    // console.log("Size: " + returnDataURLsize(imgUrl) + ", Ratio: " + overhead);
     var overhead = 1;
     if (cropper.element.id.split("x")[2] != "Social") {
         for (var i = 20; i>0; i--) {
@@ -215,7 +223,7 @@ function exportCrop(cropper) {
                 quality = quality/((overhead+9)/10);
                 var imgUrl = crop.toDataURL('image/'+imageFormat, quality);
                 overhead = returnDataURLsize(imgUrl)/fileSizeLimit;
-                console.log("Quality: " + quality + ", Size: " + returnDataURLsize(imgUrl) + ", Overhead: " + overhead);
+                //console.log("Quality: " + quality + ", Size: " + returnDataURLsize(imgUrl) + ", Overhead: " + overhead);
             //}
         }
     }
@@ -228,32 +236,17 @@ function exportCrop(cropper) {
     counter++;
     loadingbar.innerText = "" + counter + " of " + dimensions.length + " complete";
     console.log("" + counter + " of " + dimensions.length + " complete");
+
+    // Draw previews to canvas
+    var scale = Math.min(previewWidth / crop.width, previewWidth / crop.height);
+    var x = (previewWidth / 2) - (crop.width / 2) * scale;
+    var y = (previewWidth / 2) - (crop.height / 2) * scale;
+    ctx.drawImage(crop, margin + (previewWidth + margin)*((counter-1)%3) + x, margin + (previewWidth + margin)*(Math.ceil(counter/3)-1) + y, crop.width * scale, crop.height * scale);
+    ctx.font = '25px Verdana,sans-serif';
+    ctx.fillStyle = '#DDD';
+    ctx.fillText(cropper.element.id, margin + (previewWidth + margin)*((counter-1)%3) + x, margin-15 + (previewWidth+margin)*(Math.ceil(counter/3)-1) + y);
+    
 };
-
-//////////////////////////////////////////////////////////////////
-// 3.1. Export single image
-//////////////////////////////////////////////////////////////////
-
-// function exportImage(dim) {
-//     console.log("Starting " + dim);
-//     dim_x = dim.split("x")[0];
-//     dim_y = dim.split("x")[1];
-//     canvas.width = dim_x;
-//     canvas.height = dim_y;
-//     // face_x_offset = 2 * (dummy_center - sourceWidth/2);
-
-//     if (dim_x/dim_y > sourceWidth/sourceHeight) {
-//         ctx.drawImage(img, face_x_offset, (dim_y-dim_y*(sourceWidth/sourceHeight))/2, dim_x, dim_y*(sourceWidth/sourceHeight));
-//     }
-//     else {
-//         ctx.drawImage(img, (dim_x-dim_y*(sourceWidth/sourceHeight))/2, 0, dim_y*(sourceWidth/sourceHeight), dim_y);
-//     }
-    
-//     //var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");  // here is the most important part because if you dont replace you will get a DOM 18 exception.
-//     var imgUrl = canvas.toDataURL();
-//     zip.file("crop_"+dim+"."+imageFormat, imgUrl.split('base64,')[1],{base64: true});
-    
-// }
 
 //////////////////////////////////////////////////////////////////
 // X. Helper functions
